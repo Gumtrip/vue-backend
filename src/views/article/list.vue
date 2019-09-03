@@ -110,7 +110,7 @@ export default {
   .edit-input {
     padding-right: 100px;
   }
-
+  .test{width: 100px}
   .cancel-btn {
     position: absolute;
     right: 15px;
