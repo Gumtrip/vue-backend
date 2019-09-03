@@ -173,7 +173,7 @@ export const asyncRoutes = [
     redirect: '/article/list',
     name: 'article',
     meta: {
-      title: 'Example',
+      title: '文章',
       icon: 'example'
     },
     children: [
@@ -181,20 +181,20 @@ export const asyncRoutes = [
         path: 'create',
         component: () => import('@/views/article/create'),
         name: 'CreateArticle',
-        meta: { title: 'Create Article', icon: 'edit' }
+        meta: { title: '新增文章', icon: 'edit' }
       },
       {
         path: 'edit/:id(\\d+)',
         component: () => import('@/views/article/edit'),
         name: 'EditArticle',
-        meta: { title: 'Edit Article', noCache: true, activeMenu: '/article/list' },
+        meta: { title: '编辑文章', noCache: true, activeMenu: '/article/list' },
         hidden: true
       },
       {
         path: 'list',
         component: () => import('@/views/article/list'),
         name: 'ArticleList',
-        meta: { title: 'Article List', icon: 'list' }
+        meta: { title: '文章列表', icon: 'list' }
       }
     ]
   },
