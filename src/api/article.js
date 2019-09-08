@@ -26,9 +26,9 @@ export function fetchPv(pv) {
 
 export function createArticle(data) {
   return request({
-    url: '/article/create',
+    url: 'backend/articles',
     method: 'post',
-    data
+    data: data
   })
 }
 
@@ -37,5 +37,13 @@ export function updateArticle(data) {
     url: '/article/update',
     method: 'post',
     data
+  })
+}
+
+export function fetchArticleCategory(params) {
+  return request({
+    url: '/articleCategories',
+    method: 'get',
+    params: params
   })
 }

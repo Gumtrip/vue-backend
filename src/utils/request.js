@@ -2,6 +2,7 @@ import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
+import { dataTransform, errorMessage } from '@/utils/api-handle'
 // create an axios instance
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
@@ -44,7 +45,6 @@ service.interceptors.response.use(
   response => {
     const res = response.data
     // if the custom code is not 20000, it is judged as an error.
-    console.log(response.status.toString().indexOf('2'))
     if (response.status.toString().indexOf('2') !== 0) {
       Message({
         message: res.message || 'Error',
@@ -67,11 +67,66 @@ service.interceptors.response.use(
       }
       return Promise.reject(new Error(res.message || 'Error'))
     } else {
-      return res
+      return response
     }
   },
   error => {
-    console.log('err' + error) // for debug
+    // console.log('err' + error) // for debug
+    const data = dataTransform(error)
+    if (error && error.response) {
+      switch (error.response.status) {
+        case 400:
+          error.message = '请求错误!'
+          break
+        case 401:
+          error.message = data.message
+          break
+        case 403:
+          error.message = '拒绝访问!'
+          break
+        case 404:
+          error.message = `请求地址出错: ${error.response.config.url}!`
+          break
+        case 405:
+          error.message = '所请求的 HTTP 方法不允许当前认证用户访问!'
+          break
+        case 408:
+          error.message = '请求超时!'
+          break
+        case 410:
+          error.message = '当前请求的资源不再可用!'
+          break
+        case 415:
+          error.message = ' 请求中的内容类型是错误的!'
+          break
+        case 422:
+          error.message = errorMessage(data)
+          break
+        case 429:
+          error.message = '请求频次达到上限,拒绝访问!'
+          break
+        case 500:
+          error.message = errorMessage(data)
+          break
+        case 501:
+          error.message = '服务未实现!'
+          break
+        case 502:
+          error.message = '网关错误!'
+          break
+        case 503:
+          error.message = '服务不可用!'
+          break
+        case 504:
+          error.message = '网关超时!'
+          break
+        case 505:
+          error.message = 'HTTP版本不受支持!'
+          break
+        default:
+      }
+    }
+
     Message({
       message: error.message,
       type: 'error',
