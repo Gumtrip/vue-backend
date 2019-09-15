@@ -1,13 +1,16 @@
 <template>
   <div class="upload-container">
     <el-upload
-      :data="dataObj"
       :multiple="false"
       :show-file-list="false"
       :on-success="handleImageSuccess"
+      :on-error="handleImageError"
+      :before-upload="beforeUpload"
+      name="image"
       class="image-uploader"
       drag
-      action="https://httpbin.org/post"
+      :action="uploadConfig.uploadUrl"
+      :data="uploadConfig.data"
     >
       <i class="el-icon-upload" />
       <div class="el-upload__text">
@@ -16,7 +19,7 @@
     </el-upload>
     <div class="image-preview">
       <div v-show="imageUrl.length>1" class="image-preview-wrapper">
-        <img :src="imageUrl+'?imageView2/1/w/200/h/200'">
+        <img :src="imageUrl">
         <div class="image-preview-action">
           <i class="el-icon-delete" @click="rmImage" />
         </div>
@@ -26,7 +29,8 @@
 </template>
 
 <script>
-import { getToken } from '@/api/qiniu'
+import { errorMessage } from '@/utils/api-handle'
+import { Message } from 'element-ui'
 
 export default {
   name: 'SingleImageUpload',
@@ -34,12 +38,15 @@ export default {
     value: {
       type: String,
       default: ''
+    },
+    uploadConfig: {
+      type: Object,
+      required: true
     }
   },
   data() {
     return {
-      tempUrl: '',
-      dataObj: { token: '', key: '' }
+      tempUrl: ''
     }
   },
   computed: {
@@ -54,23 +61,26 @@ export default {
     emitInput(val) {
       this.$emit('input', val)
     },
-    handleImageSuccess() {
-      this.emitInput(this.tempUrl)
+    handleImageSuccess(res, file) {
+      this.emitInput(res.full_path)
     },
-    beforeUpload() {
-      const _self = this
-      return new Promise((resolve, reject) => {
-        getToken().then(response => {
-          const key = response.data.qiniu_key
-          const token = response.data.qiniu_token
-          _self._data.dataObj.token = token
-          _self._data.dataObj.key = key
-          this.tempUrl = response.data.qiniu_url
-          resolve(true)
-        }).catch(err => {
-          console.log(err)
-          reject(false)
-        })
+    beforeUpload(file) {
+      const isImage = file.type === 'image/jpeg' || 'image/png' || 'image/gif'
+      const isLt2M = file.size / 1024 / 1024 < 2
+      if (!isImage) {
+        this.$message.error('上传图片只能是 JPG/PNG/GIF 格式!')
+      }
+      if (!isLt2M) {
+        this.$message.error('上传图片大小不能超过 2MB!')
+      }
+      return isImage && isLt2M
+    },
+    handleImageError(err, file, fileList) {
+      const errorMsg = errorMessage(JSON.parse(err.message))
+      Message({
+        message: errorMsg || 'Error',
+        type: 'error',
+        duration: 5 * 1000
       })
     }
   }

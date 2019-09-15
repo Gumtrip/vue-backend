@@ -6,7 +6,6 @@
         <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm">
           保存
         </el-button>
-
       </sticky>
 
       <div class="createPost-main-container">
@@ -30,8 +29,8 @@
           <Tinymce ref="editor" v-model="postForm.content" :height="400" />
         </el-form-item>
 
-        <el-form-item prop="image_uri" style="margin-bottom: 30px;">
-          <Upload v-model="postForm.image_uri" />
+        <el-form-item prop="image_uri">
+          <Upload v-model="postForm.image_uri" :upload-config="uploadConfig" />
         </el-form-item>
       </div>
     </el-form>
@@ -40,10 +39,10 @@
 
 <script>
 import Tinymce from '@/components/Tinymce'
-import Upload from '@/components/Upload/SingleImage3'
+import Upload from '@/components/Upload/SingleImage'
 import MDinput from '@/components/MDinput'
 import Sticky from '@/components/Sticky' // 粘性header组件
-import { fetchArticle, createArticle, fetchArticleCategory } from '@/api/article'
+import { fetchArticle, createArticle, fetchArticleCategory, updateArticle } from '@/api/article'
 
 const defaultForm = {
   status: '',
@@ -76,15 +75,21 @@ export default {
       }
     }
     return {
+      id: undefined,
       postForm: Object.assign({}, defaultForm),
       categories: {},
       loading: false,
+      uploadConfig: {
+        data: {
+          model: 'article'
+        },
+        uploadUrl: 'http://top-top.com/api/backend/images'
+      },
       userListOptions: [],
       rules: {
-        // image_uri: [{ validator: validateRequire }],
         title: [{ validator: validateRequire }],
-        content: [{ validator: validateRequire }],
-        article_category_id: [{ validator: validateRequire }]
+        article_category_id: [{ validator: validateRequire }],
+        content: [{ validator: validateRequire }]
       },
       tempRoute: {}
     }
@@ -95,6 +100,7 @@ export default {
   created() {
     if (this.isEdit) {
       const id = this.$route.params && this.$route.params.id
+      this.id = id
       this.fetchData(id)
     } else {
       this.postForm = Object.assign({}, defaultForm)
@@ -106,11 +112,6 @@ export default {
     fetchData(id) {
       fetchArticle(id).then(response => {
         this.postForm = response.data
-
-        // just for test
-        this.postForm.title += `   Article Id:${this.postForm.id}`
-        this.postForm.content_short += `   Article Id:${this.postForm.id}`
-
         // set tagsview title
         this.setTagsViewTitle()
 
@@ -125,34 +126,42 @@ export default {
       this.categories = res.data.data
     },
     setTagsViewTitle() {
-      const title = 'Edit Article'
+      const title = '编辑文章'
       const route = Object.assign({}, this.tempRoute, { title: `${title}-${this.postForm.id}` })
       this.$store.dispatch('tagsView/updateVisitedView', route)
     },
     setPageTitle() {
-      const title = 'Edit Article'
+      const title = '编辑文章'
       document.title = `${title} - ${this.postForm.id}`
     },
     submitForm() {
       this.$refs.postForm.validate(async valid => {
         if (valid) {
           this.loading = true
-          const res = await createArticle(this.postForm)
-          if (res.status === 201) {
-            this.$notify({
-              title: '成功',
-              message: '发布文章成功',
-              type: 'success',
-              duration: 2000
-            })
-            this.postForm.status = 'published'
-          }
+          let res
+          try {
+            if (this.isEdit) {
+              res = await updateArticle(this.id, this.postForm)
+            } else {
+              res = await createArticle(this.postForm)
+            }
 
+            if (res.status === 201 || res.status === 200) {
+              this.$notify({
+                title: '成功',
+                message: '提交成功',
+                type: 'success',
+                duration: 2000
+              })
+              this.postForm.status = 'published'
+            }
+          } catch (e) {
+            console.log(e)
+          }
           this.loading = false
         } else {
           console.log('error submit!!')
           this.loading = false
-          return false
         }
       })
     }

@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-export function fetchList(query) {
+export function fetchArticles(query) {
   return request({
     url: '/articles',
     method: 'get',
@@ -10,7 +10,7 @@ export function fetchList(query) {
 
 export function fetchArticle(id) {
   return request({
-    url: '/article/detail',
+    url: 'backend/articles/' + id,
     method: 'get',
     params: { id }
   })
@@ -32,14 +32,13 @@ export function createArticle(data) {
   })
 }
 
-export function updateArticle(data) {
+export function updateArticle(id, data) {
   return request({
-    url: '/article/update',
-    method: 'post',
-    data
+    url: 'backend/articles/' + id,
+    method: 'patch',
+    data: data
   })
 }
-
 export function fetchArticleCategory(params) {
   return request({
     url: '/articleCategories',
@@ -47,3 +46,4 @@ export function fetchArticleCategory(params) {
     params: params
   })
 }
+
