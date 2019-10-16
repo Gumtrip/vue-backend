@@ -1,15 +1,15 @@
-import Cookies from 'js-cookie'
-
-const TokenKey = 'Admin-Token'
-
+import ls from '@/utils/localStorage'
 export function getToken() {
-  return Cookies.get(TokenKey)
+  return ls.getItem('token')
 }
 
 export function setToken(token) {
-  return Cookies.set(TokenKey, token)
+  token.token_expired_at = new Date().getTime() + (token.expires_in * 1000)
+  const token_expired_time = new Date(token.token_expired_at)
+  token.token_expired_time = token_expired_time.toLocaleDateString().replace(/\//g, '-') + ' ' + token_expired_time.toTimeString().substr(0, 8)
+  ls.setItem('token', token)
 }
 
 export function removeToken() {
-  return Cookies.remove(TokenKey)
+  return ls.setItem('token', null)
 }
