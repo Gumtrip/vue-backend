@@ -51,7 +51,7 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/login',
+    path: '/backend/login',
     component: () => import('@/views/login/index'),
     hidden: true
   },
@@ -73,10 +73,10 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
+    redirect: '/backend/dashboard',
     children: [
       {
-        path: 'dashboard',
+        path: '/backend/dashboard',
         component: () => import('@/views/dashboard/index'),
         name: 'Dashboard',
         meta: { title: 'Dashboard', icon: 'dashboard', affix: true }
@@ -137,7 +137,7 @@ export const asyncRoutes = [
   tableRouter,
 
   {
-    path: '/article',
+    path: '/backend/article',
     component: Layout,
     redirect: '/article/list',
     name: 'article',

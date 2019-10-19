@@ -61,7 +61,7 @@
 
 <script>
 import SocialSign from './components/SocialSignin'
-
+import { login } from '../../api/user.js'
 export default {
   name: 'Login',
   components: { SocialSign },
@@ -146,19 +146,28 @@ export default {
       })
     },
     handleLogin() {
-      this.$refs.loginForm.validate(valid => {
+      this.$refs.loginForm.validate(async valid => {
         if (valid) {
           this.loading = true
-          this.$store.dispatch('user/login', this.loginForm)
-            .then((res) => {
-              console.log(res)
-              this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
-              this.loading = false
-            })
-            .catch((e) => {
-              console.log(e)
-              this.loading = false
-            })
+          try {
+            const res = await login(this.loginForm)
+            if (res.status === 201) {
+              this.$message({
+                message: '登陆成功',
+                type: 'success'
+              })
+              this.$store.dispatch('user/login', this.loginForm)
+                .then((res) => {
+                  this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
+                })
+                .catch((e) => {
+                  console.log(e)
+                })
+            }
+            this.loading = false
+          } catch (e) {
+            this.loading = false
+          }
         } else {
           console.log('error submit!!')
           return false
@@ -173,24 +182,6 @@ export default {
         return acc
       }, {})
     }
-    // afterQRScan() {
-    //   if (e.key === 'x-admin-oauth-code') {
-    //     const code = getQueryObject(e.newValue)
-    //     const codeMap = {
-    //       wechat: 'code',
-    //       tencent: 'code'
-    //     }
-    //     const type = codeMap[this.auth_type]
-    //     const codeName = code[type]
-    //     if (codeName) {
-    //       this.$store.dispatch('LoginByThirdparty', codeName).then(() => {
-    //         this.$router.push({ path: this.redirect || '/' })
-    //       })
-    //     } else {
-    //       alert('第三方登录失败')
-    //     }
-    //   }
-    // }
   }
 }
 </script>
