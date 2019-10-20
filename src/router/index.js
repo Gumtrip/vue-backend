@@ -139,7 +139,7 @@ export const asyncRoutes = [
     path: '/backend/article_categories',
     component: Layout,
     redirect: '/backend/article_categories/list',
-    name: 'article',
+    name: 'article_categories',
     meta: {
       title: '文章分类',
       icon: 'example'
@@ -147,21 +147,21 @@ export const asyncRoutes = [
     children: [
       {
         path: 'create',
-        component: () => import('@/views/article/create'),
-        name: 'CreateArticle',
+        component: () => import('@/views/article_category/create'),
+        name: 'createArticleCategory',
         meta: { title: '新增文章分类', icon: 'edit' }
       },
       {
         path: 'edit/:id(\\d+)',
-        component: () => import('@/views/article/edit'),
-        name: 'EditArticle',
+        component: () => import('@/views/article_category/edit'),
+        name: 'editArticleCategories',
         meta: { title: '编辑文章分类', noCache: true, activeMenu: '/article/list' },
         hidden: true
       },
       {
         path: 'list',
-        component: () => import('@/views/article/list'),
-        name: 'ArticleList',
+        component: () => import('@/views/article_category/list'),
+        name: 'articleCategoriesList',
         meta: { title: '文章列表分类', icon: 'list' }
       }
     ]

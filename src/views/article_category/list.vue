@@ -9,7 +9,7 @@
 
       <el-table-column min-width="300px" label="标题">
         <template slot-scope="scope">
-          <router-link :to="{name:'EditArticle',params:{id:scope.row.id}}" class="link-type">
+          <router-link :to="{name:'editArticleCategories',params:{id:scope.row.id}}" class="link-type">
             <span>{{ scope.row.title }}</span>
           </router-link>
         </template>
@@ -29,7 +29,7 @@
 
       <el-table-column align="center" label="操作" width="120">
         <template slot-scope="scope">
-          <router-link :to="{name:'EditArticle',params:{id:scope.row.id}}">
+          <router-link :to="{name:'editArticleCategories',params:{id:scope.row.id}}">
             <el-button type="primary" size="small" icon="el-icon-edit">
               修改
             </el-button>
@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import { fetchArticles } from '@/api/article'
+import { fetchArticleCategories } from '@/api/article'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
 export default {
@@ -81,7 +81,7 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      fetchArticles(this.listQuery).then(response => {
+      fetchArticleCategories(this.listQuery).then(response => {
         this.list = response.data.data
         this.total = response.data.meta.pagination.total
         this.listLoading = false
@@ -95,6 +95,7 @@ export default {
   .edit-input {
     padding-right: 100px;
   }
+
   .cancel-btn {
     position: absolute;
     right: 15px;
