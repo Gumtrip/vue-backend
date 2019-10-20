@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function fetchArticles(query) {
   return request({
-    url: 'backend/articles',
+    url: 'admin/articles',
     method: 'get',
     params: query
   })
@@ -10,7 +10,7 @@ export function fetchArticles(query) {
 
 export function fetchArticle(id, params) {
   return request({
-    url: 'backend/articles/' + id,
+    url: 'admin/articles/' + id,
     method: 'get',
     params: { params }
   })
@@ -26,7 +26,7 @@ export function fetchPv(pv) {
 
 export function createArticle(data) {
   return request({
-    url: 'backend/articles',
+    url: 'admin/articles',
     method: 'post',
     data: data
   })
@@ -34,7 +34,7 @@ export function createArticle(data) {
 
 export function updateArticle(id, data) {
   return request({
-    url: 'backend/articles/' + id,
+    url: 'admin/articles/' + id,
     method: 'patch',
     data: data
   })
@@ -42,7 +42,7 @@ export function updateArticle(id, data) {
 
 export function fetchArticleCategories(params) {
   return request({
-    url: 'backend/article_categories',
+    url: 'admin/article_categories',
     method: 'get',
     params: params
   })
@@ -50,7 +50,7 @@ export function fetchArticleCategories(params) {
 
 export function fetchArticleCategory(id, params) {
   return request({
-    url: 'backend/article_categories/' + id,
+    url: 'admin/article_categories/' + id,
     method: 'get',
     params: params
   })
@@ -58,7 +58,7 @@ export function fetchArticleCategory(id, params) {
 
 export function createArticleCategory(data) {
   return request({
-    url: 'backend/article_categories',
+    url: 'admin/article_categories',
     method: 'post',
     data: data
   })
@@ -66,7 +66,7 @@ export function createArticleCategory(data) {
 
 export function updateArticleCategory(id, data) {
   return request({
-    url: 'backend/article_categories/' + id,
+    url: 'admin/article_categories/' + id,
     method: 'patch',
     data: data
   })
