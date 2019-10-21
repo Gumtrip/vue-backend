@@ -83,7 +83,7 @@ export default {
         data: {
           model: 'article'
         },
-        uploadUrl: 'http://top-top.com/api/backend/images'
+        uploadUrl: 'http://top-top.com/api/admin/images'
       },
       userListOptions: [],
       rules: {
