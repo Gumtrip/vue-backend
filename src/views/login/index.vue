@@ -46,7 +46,6 @@
       </el-tooltip>
 
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
-
     </el-form>
 
     <el-dialog title="Or connect with" :visible.sync="showDialog">
@@ -82,8 +81,8 @@ export default {
     }
     return {
       loginForm: {
-        mobile: '',
-        password: ''
+        mobile: '13809811545',
+        password: '123456'
       },
       loginRules: {
         mobile: [{ required: true, trigger: 'blur', validator: validateMobile }],
@@ -181,6 +180,12 @@ export default {
         }
         return acc
       }, {})
+    },
+    test() {
+      this.$message({
+        message: '测试',
+        type: 'success'
+      })
     }
   }
 }

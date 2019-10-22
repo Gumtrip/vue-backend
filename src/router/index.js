@@ -47,7 +47,7 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/admin/login',
+    path: '/login',
     component: () => import('@/views/login/index'),
     hidden: true
   },
@@ -69,10 +69,10 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/admin/dashboard',
+    redirect: '/dashboard',
     children: [
       {
-        path: '/admin/dashboard',
+        path: '/dashboard',
         component: () => import('@/views/dashboard/index'),
         name: 'Dashboard',
         meta: { title: 'Dashboard', icon: 'dashboard', affix: true }
@@ -105,9 +105,9 @@ export const asyncRoutes = [
   /** when your routing map is too long, you can split it into small modules **/
 
   {
-    path: '/admin/article',
+    path: '/article',
     component: Layout,
-    redirect: '/admin/article/list',
+    redirect: '/article/list',
     name: 'article',
     meta: {
       title: '文章',
@@ -136,9 +136,9 @@ export const asyncRoutes = [
     ]
   },
   {
-    path: '/admin/article_categories',
+    path: '/article_categories',
     component: Layout,
-    redirect: '/admin/article_categories/list',
+    redirect: '/article_categories/list',
     name: 'article_categories',
     meta: {
       title: '文章分类',
