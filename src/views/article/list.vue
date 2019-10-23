@@ -27,12 +27,11 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="操作" width="120">
+      <el-table-column align="center" label="操作" width="180">
         <template slot-scope="scope">
           <router-link :to="{name:'EditArticle',params:{id:scope.row.id}}">
-            <el-button type="primary" size="small" icon="el-icon-edit">
-              修改
-            </el-button>
+            <el-button type="primary" size="small" icon="el-icon-edit" />
+            <el-button type="primary" size="small" icon="el-icon-delete" />
           </router-link>
         </template>
       </el-table-column>
