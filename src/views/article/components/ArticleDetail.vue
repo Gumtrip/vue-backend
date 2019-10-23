@@ -81,8 +81,7 @@ export default {
       uploadConfig: {
         data: {
           model: 'article'
-        },
-        uploadUrl: process.env.VUE_APP_BASE_API + 'admin/images'
+        }
       },
       userListOptions: [],
       rules: {

@@ -9,7 +9,7 @@
       name="images"
       class="image-uploader"
       drag
-      :action="uploadConfig.uploadUrl"
+      :action="uploadUrl"
       :data="uploadConfig.data"
     >
       <i class="el-icon-upload" />
@@ -46,7 +46,8 @@ export default {
   },
   data() {
     return {
-      tempUrl: ''
+      tempUrl: '',
+      uploadUrl: process.env.VUE_APP_BASE_API + 'admin/images'
     }
   },
   computed: {
