@@ -12,7 +12,9 @@
         :on-success="handleSuccess"
         :before-upload="beforeUpload"
         class="editor-slide-upload"
-        action="https://httpbin.org/post"
+        :action="uploadConfig.uploadUrl"
+        :data="uploadConfig.data"
+        name="images"
         list-type="picture-card"
       >
         <el-button size="small" type="primary">
@@ -38,6 +40,10 @@ export default {
     color: {
       type: String,
       default: '#1890ff'
+    },
+    uploadConfig: {
+      type: Object,
+      required: true
     }
   },
   data() {
@@ -67,7 +73,7 @@ export default {
       const objKeyArr = Object.keys(this.listObj)
       for (let i = 0, len = objKeyArr.length; i < len; i++) {
         if (this.listObj[objKeyArr[i]].uid === uid) {
-          this.listObj[objKeyArr[i]].url = response.files.file
+          this.listObj[objKeyArr[i]].response = file.response
           this.listObj[objKeyArr[i]].hasSuccess = true
           return
         }

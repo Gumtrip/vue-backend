@@ -26,9 +26,8 @@
           </el-select>
         </el-form-item>
         <el-form-item prop="content" style="margin-bottom: 30px;">
-          <Tinymce ref="editor" v-model="postForm.content" :height="400" />
+          <Tinymce ref="editor" v-model="postForm.content" :height="400" :upload-config="uploadConfig" />
         </el-form-item>
-
         <el-form-item prop="image_uri">
           <Upload v-model="postForm.image_uri" :upload-config="uploadConfig" />
         </el-form-item>
@@ -83,7 +82,7 @@ export default {
         data: {
           model: 'article'
         },
-        uploadUrl: 'http://top-top.com/api/admin/images'
+        uploadUrl: process.env.VUE_APP_BASE_API + 'admin/images'
       },
       userListOptions: [],
       rules: {

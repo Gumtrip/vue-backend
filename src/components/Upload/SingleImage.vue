@@ -6,7 +6,7 @@
       :on-success="handleImageSuccess"
       :on-error="handleImageError"
       :before-upload="beforeUpload"
-      name="image"
+      name="images"
       class="image-uploader"
       drag
       :action="uploadConfig.uploadUrl"
