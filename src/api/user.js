@@ -22,3 +22,11 @@ export function logout() {
     method: 'delete'
   })
 }
+
+export function refreshToken(data) {
+  return request({
+    url: 'admin/auth/refreshToken',
+    method: 'PUT',
+    data: data
+  })
+}
