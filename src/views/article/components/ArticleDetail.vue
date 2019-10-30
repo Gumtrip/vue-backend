@@ -25,7 +25,7 @@
             <el-option v-for="(category,key) in categories" :key="key" :label="category.title" :value="category.id" />
           </el-select>
         </el-form-item>
-        <el-form-item prop="content" style="margin-bottom: 30px;">
+        <el-form-item prop="content" class="article_content">
           <Tinymce ref="editor" v-model="postForm.content" :height="400" :upload-config="uploadConfig" />
         </el-form-item>
         <el-form-item prop="image_uri">
@@ -151,7 +151,12 @@ export default {
                 type: 'success',
                 duration: 2000
               })
-              this.postForm.status = 'published'
+              if (res.status === 201) {
+                this.postForm = {}
+                this.$refs.editor.setContent('')
+              }
+
+              // this.postForm.status = 'published'
             }
           } catch (e) {
             console.log(e)
@@ -195,7 +200,7 @@ export default {
     top: 0px;
   }
 }
-
+.article_content{margin-bottom: 30px;}
 .article-textarea /deep/ {
   textarea {
     padding-right: 40px;
