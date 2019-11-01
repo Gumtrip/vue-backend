@@ -2,7 +2,8 @@
   <div class="createPost-container">
     <el-form ref="postForm" :model="postForm" :rules="rules" class="form-container">
 
-      <sticky :z-index="10" :class-name="'sub-navbar '+postForm.status">
+      <sticky :z-index="10" :class-name="'sub-navbar'">
+        <span v-show="updateDate" class="timeTips" v-text="'更新于:'+updateDate" />
         <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm">
           保存
         </el-button>
@@ -42,6 +43,7 @@ import Upload from '@/components/Upload/SingleImage'
 import MDinput from '@/components/MDinput'
 import Sticky from '@/components/Sticky' // 粘性header组件
 import { fetchArticle, createArticle, fetchArticleCategories, updateArticle } from '@/api/article'
+import moment from 'moment'
 
 const defaultForm = {
   status: '',
@@ -83,7 +85,7 @@ export default {
           model: 'article'
         }
       },
-      userListOptions: [],
+      updateDate: '',
       rules: {
         title: [{ validator: validateRequire }],
         article_category_id: [{ validator: validateRequire }],
@@ -155,7 +157,7 @@ export default {
                 this.postForm = {}
                 this.$refs.editor.setContent('')
               }
-
+              this.updateDate = moment().format('YYYY-DD-MM H:m:s')
               // this.postForm.status = 'published'
             }
           } catch (e) {
