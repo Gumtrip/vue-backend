@@ -146,19 +146,14 @@ export default {
               res = await createArticle(this.postForm)
             }
 
-            if (res.status === 201 || res.status === 200) {
-              this.$notify({
-                title: '成功',
-                message: '提交成功',
-                type: 'success',
-                duration: 2000
-              })
-              if (res.status === 201) {
-                this.postForm = {}
-                this.$refs.editor.setContent('')
-              }
+            if (res.status === 201) {
+              this.postForm = {}
+              this.$refs.editor.setContent('')
+              this.$notify({ title: '成功', message: '创建成功', type: 'success' })
+            }
+            if (res.status === 200) {
               this.updateDate = moment().format('YYYY-DD-MM H:m:s')
-              // this.postForm.status = 'published'
+              this.$notify({ title: '成功', message: '修改成功', type: 'success' })
             }
           } catch (e) {
             console.log(e)
