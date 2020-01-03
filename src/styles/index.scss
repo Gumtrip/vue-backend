@@ -159,6 +159,11 @@ aside {
   &.deleted {
     background: #d0d0d0;
   }
+
+  .timeTips {
+    color: #fff;
+    font-style: italic
+  }
 }
 
 .link-type,

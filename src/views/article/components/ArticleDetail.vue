@@ -2,7 +2,8 @@
   <div class="createPost-container">
     <el-form ref="postForm" :model="postForm" :rules="rules" class="form-container">
 
-      <sticky :z-index="10" :class-name="'sub-navbar '+postForm.status">
+      <sticky :z-index="10" :class-name="'sub-navbar'">
+        <span v-show="updateDate" class="timeTips" v-text="'更新于:'+updateDate" />
         <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm">
           保存
         </el-button>
@@ -47,6 +48,7 @@ import Upload from '@/components/Upload/SingleImage'
 import MDinput from '@/components/MDinput'
 import Sticky from '@/components/Sticky' // 粘性header组件
 import { fetchArticle, createArticle, fetchArticleCategories, updateArticle } from '@/api/article'
+import moment from 'moment'
 
 const defaultForm = {
   status: '',
@@ -90,7 +92,7 @@ export default {
           id: typeof this.$route.params.id !== 'undefined' ? this.$route.params.id : ''
         }
       },
-      userListOptions: [],
+      updateDate: '',
       rules: {
         title: [{ validator: validateRequire }],
         category_id: [{ validator: validateRequire }],
@@ -151,19 +153,14 @@ export default {
               res = await createArticle(this.postForm)
             }
 
-            if (res.status === 201 || res.status === 200) {
-              this.$notify({
-                title: '成功',
-                message: '提交成功',
-                type: 'success',
-                duration: 2000
-              })
-              if (res.status === 201) {
-                this.postForm = {}
-                this.$refs.editor.setContent('')
-              }
-
-              // this.postForm.status = 'published'
+            if (res.status === 201) {
+              this.postForm = {}
+              this.$refs.editor.setContent('')
+              this.$notify({ title: '成功', message: '创建成功', type: 'success' })
+            }
+            if (res.status === 200) {
+              this.updateDate = moment().format('YYYY-DD-MM H:m:s')
+              this.$notify({ title: '成功', message: '修改成功', type: 'success' })
             }
           } catch (e) {
             console.log(e)
