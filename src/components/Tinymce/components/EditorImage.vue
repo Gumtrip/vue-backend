@@ -1,7 +1,7 @@
 <template>
   <div class="upload-container">
     <el-button :style="{background:color,borderColor:color}" icon="el-icon-upload" size="mini" type="primary" @click=" dialogVisible=true">
-      upload
+      上传
     </el-button>
     <el-dialog :visible.sync="dialogVisible">
       <el-upload
@@ -10,22 +10,23 @@
         :show-file-list="true"
         :on-remove="handleRemove"
         :on-success="handleSuccess"
+        :on-error="handleImageError"
         :before-upload="beforeUpload"
         class="editor-slide-upload"
         :action="uploadUrl"
         :data="uploadConfig.data"
-        name="images"
+        name="image"
         list-type="picture-card"
       >
         <el-button size="small" type="primary">
-          Click upload
+          点击选择文件
         </el-button>
       </el-upload>
       <el-button @click="dialogVisible = false">
-        Cancel
+        取消
       </el-button>
       <el-button type="primary" @click="handleSubmit">
-        Confirm
+        确认
       </el-button>
     </el-dialog>
   </div>
@@ -33,6 +34,8 @@
 
 <script>
 // import { getToken } from 'api/qiniu'
+import { Message } from 'element-ui'
+import { errorMessage } from '@/utils/api-handle'
 
 export default {
   name: 'EditorSlideUpload',
@@ -51,7 +54,7 @@ export default {
       dialogVisible: false,
       listObj: {},
       fileList: [],
-      uploadUrl: process.env.VUE_APP_BASE_API + 'admin/images'
+      uploadUrl: process.env.VUE_APP_BASE_API + 'admin/image'
     }
   },
   methods: {
@@ -103,7 +106,17 @@ export default {
         }
         resolve(true)
       })
+    },
+    handleImageError(err, file, fileList) {
+      const errorMsg = errorMessage(JSON.parse(err.message))
+      this.handleRemove(file)
+      Message({
+        message: errorMsg || 'Error',
+        type: 'error',
+        duration: 5 * 1000
+      })
     }
+
   }
 }
 </script>

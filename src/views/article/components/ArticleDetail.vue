@@ -20,16 +20,21 @@
 
           </el-col>
         </el-row>
-        <el-form-item prop="article_category_id">
-          <el-select v-model="postForm.article_category_id" placeholder="文章分类" name="article_category_id" required>
+        <el-form-item prop="category_id">
+          <el-select v-model="postForm.category_id" placeholder="文章分类" name="category_id" required>
             <el-option v-for="(category,key) in categories" :key="key" :label="category.title" :value="category.id" />
           </el-select>
         </el-form-item>
-        <el-form-item prop="content" class="article_content">
-          <Tinymce ref="editor" v-model="postForm.content" :height="400" :upload-config="uploadConfig" />
+
+        <el-form-item>
+          <el-input v-model="postForm.intro" type="textarea" :rows="2" placeholder="请输入简介" />
         </el-form-item>
-        <el-form-item prop="image_uri">
-          <Upload v-model="postForm.image_uri" :upload-config="uploadConfig" />
+
+        <el-form-item prop="desc" class="article_content">
+          <Tinymce ref="editor" v-model="postForm.desc" :height="400" :upload-config="uploadConfig" />
+        </el-form-item>
+        <el-form-item prop="image">
+          <Upload v-model="postForm.image" :upload-config="uploadConfig" />
         </el-form-item>
       </div>
     </el-form>
@@ -46,9 +51,10 @@ import { fetchArticle, createArticle, fetchArticleCategories, updateArticle } fr
 const defaultForm = {
   status: '',
   title: '', // 文章题目
-  content: '', // 文章内容
-  article_category_id: '', // 文章内容
-  image_uri: '', // 文章图片
+  intro: '', // 文章内容
+  desc: '', // 文章内容
+  category_id: '', // 文章内容
+  image: '', // 文章图片
   id: undefined
 }
 
@@ -80,14 +86,15 @@ export default {
       loading: false,
       uploadConfig: {
         data: {
-          model: 'article'
+          folder: 'article',
+          id: typeof this.$route.params.id !== 'undefined' ? this.$route.params.id : ''
         }
       },
       userListOptions: [],
       rules: {
         title: [{ validator: validateRequire }],
-        article_category_id: [{ validator: validateRequire }],
-        content: [{ validator: validateRequire }]
+        category_id: [{ validator: validateRequire }],
+        desc: [{ validator: validateRequire }]
       },
       tempRoute: {}
     }
