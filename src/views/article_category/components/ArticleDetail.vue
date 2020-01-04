@@ -17,7 +17,9 @@
                 标题
               </MDinput>
             </el-form-item>
-
+            <el-form-item label="所属分类">
+              <cat-tree v-model="postForm.parent_id" :options="categoryTrees" :default-value="postForm.parent_id" />
+            </el-form-item>
           </el-col>
         </el-row>
       </div>
@@ -28,16 +30,19 @@
 <script>
 import MDinput from '@/components/MDinput'
 import Sticky from '@/components/Sticky' // 粘性header组件
-import { fetchArticleCategory, createArticleCategory, updateArticleCategory } from '@/api/article'
+import CatTree from '@/components/CatTree' //
+
+import { fetchArticleCategory, createArticleCategory, updateArticleCategory, fetchArticleCategoryTrees } from '@/api/article'
 
 const defaultForm = {
   title: '', // 文章题目
-  id: undefined
+  id: undefined,
+  parent_id: null
 }
 
 export default {
   name: 'ArticleDetail',
-  components: { MDinput, Sticky },
+  components: { MDinput, Sticky, CatTree },
   props: {
     isEdit: {
       type: Boolean,
@@ -71,19 +76,25 @@ export default {
       rules: {
         title: [{ validator: validateRequire }]
       },
-      tempRoute: {}
+      tempRoute: {},
+      categoryTrees: []
     }
   },
   computed: {},
   created() {
+    const treeQuery = {
+      depth: 1
+    }
     if (this.isEdit) {
       const id = this.$route.params && this.$route.params.id
       this.id = id
       this.fetchData(id)
+      treeQuery.id = id
     } else {
       this.postForm = Object.assign({}, defaultForm)
     }
     this.tempRoute = Object.assign({}, this.$route)
+    this.fetchTrees(treeQuery)
   },
   methods: {
     fetchData(id) {
@@ -97,7 +108,10 @@ export default {
         console.log(err)
       })
     },
-
+    async fetchTrees(query) {
+      const trees = await fetchArticleCategoryTrees(query)
+      this.categoryTrees = trees.data
+    },
     setTagsViewTitle() {
       const title = '编辑文章'
       const route = Object.assign({}, this.tempRoute, { title: `${title}-${this.postForm.id}` })

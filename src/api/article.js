@@ -71,3 +71,10 @@ export function updateArticleCategory(id, data) {
     data: data
   })
 }
+export function fetchArticleCategoryTrees(params) {
+  return request({
+    url: 'admin/article_category_trees',
+    method: 'get',
+    params: params
+  })
+}

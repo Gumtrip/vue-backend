@@ -155,14 +155,14 @@ export const asyncRoutes = [
         path: 'edit/:id(\\d+)',
         component: () => import('@/views/article_category/edit'),
         name: 'editArticleCategories',
-        meta: { title: '编辑文章分类', noCache: true, activeMenu: '/article/list' },
+        meta: { title: '编辑文章分类', noCache: true, activeMenu: '/article_categories/list' },
         hidden: true
       },
       {
         path: 'list',
         component: () => import('@/views/article_category/list'),
         name: 'articleCategoriesList',
-        meta: { title: '文章列表分类', icon: 'list' }
+        meta: { title: '文章分类列表', icon: 'list' }
       }
     ]
   },
