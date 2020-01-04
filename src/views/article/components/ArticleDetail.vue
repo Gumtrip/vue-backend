@@ -22,9 +22,7 @@
           </el-col>
         </el-row>
         <el-form-item prop="category_id">
-          <el-select v-model="postForm.category_id" placeholder="文章分类" name="category_id" required>
-            <el-option v-for="(category,key) in categories" :key="key" :label="category.title" :value="category.id" />
-          </el-select>
+          <cat-tree v-model="postForm.category_id" :options="categoryTrees" :default-value="postForm.category_id" />
         </el-form-item>
 
         <el-form-item>
@@ -47,7 +45,9 @@ import Tinymce from '@/components/Tinymce'
 import Upload from '@/components/Upload/SingleImage'
 import MDinput from '@/components/MDinput'
 import Sticky from '@/components/Sticky' // 粘性header组件
-import { fetchArticle, createArticle, fetchArticleCategories, updateArticle } from '@/api/article'
+import CatTree from '@/components/CatTree' //
+
+import { fetchArticle, createArticle, fetchArticleCategories, updateArticle, fetchArticleCategoryTrees } from '@/api/article'
 import moment from 'moment'
 
 const defaultForm = {
@@ -62,7 +62,7 @@ const defaultForm = {
 
 export default {
   name: 'ArticleDetail',
-  components: { Tinymce, MDinput, Upload, Sticky },
+  components: { Tinymce, MDinput, Upload, Sticky, CatTree },
   props: {
     isEdit: {
       type: Boolean,
@@ -98,7 +98,9 @@ export default {
         category_id: [{ validator: validateRequire }],
         desc: [{ validator: validateRequire }]
       },
-      tempRoute: {}
+      tempRoute: {},
+      categoryTrees: []
+
     }
   },
   computed: {
@@ -112,7 +114,7 @@ export default {
     } else {
       this.postForm = Object.assign({}, defaultForm)
     }
-    this.fetchArticleCategories()
+    this.fetchTrees()
     this.tempRoute = Object.assign({}, this.$route)
   },
   methods: {
@@ -131,6 +133,10 @@ export default {
     async fetchArticleCategories() {
       const res = await fetchArticleCategories()
       this.categories = res.data.data
+    },
+    async fetchTrees() {
+      const trees = await fetchArticleCategoryTrees()
+      this.categoryTrees = trees.data
     },
     setTagsViewTitle() {
       const title = '编辑文章'
