@@ -16,6 +16,10 @@ export default {
     defaultValue: {
       type: Number,
       default: null
+    },
+    noZero: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -56,7 +60,7 @@ export default {
           }
         }
       }
-      if (this.options.length > 0) {
+      if (!this.noZero) {
         tData.unshift({ label: '无', value: 0 })
       }
       return tData

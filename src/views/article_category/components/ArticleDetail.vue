@@ -18,7 +18,7 @@
               </MDinput>
             </el-form-item>
             <el-form-item label="所属分类">
-              <cat-tree v-model="postForm.parent_id" :options="categoryTrees" :default-value="postForm.parent_id" />
+              <cat-tree v-model="postForm.parent_id" :options="categoryTrees" :default-value="postForm.parent_id" :no-zero="false" />
             </el-form-item>
           </el-col>
         </el-row>
